@@ -1,0 +1,13 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "ivanur",
+  "password": "Douglas_222",
+  "database": "yt_admin_node",
+  "entities": [
+    "src/entity/*.js"
+  ],
+  "logging": false,
+  "synchronize": true
+}
