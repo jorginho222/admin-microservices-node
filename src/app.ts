@@ -7,7 +7,7 @@ import * as amqp from 'amqplib/callback_api'
 
 createConnection().then(db => {
     const productRepository = db.getRepository(Product)
-    amqp.connect('amqps://yjawjfrr:M_RnjO_jbU2Hy6SpN-S9Z-SofaIY2lMV@cow.rmq2.cloudamqp.com/yjawjfrr', function (error0, connection) {
+    amqp.connect(process.env.RABBITMQ_URL, function (error0, connection) {
         if (error0) {
             throw error0
         }
