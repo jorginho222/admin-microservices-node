@@ -20,7 +20,7 @@ export class Product {
     @Column({nullable: true})
     exchangeTags: string
 
-    @JoinTable
-    @ManyToMany(() => Product, (product) => product.permutedProducts, {default: []})
+    @JoinTable({name: 'product_permuted_products'})
+    @ManyToMany(() => Product, (product) => product.permutedProducts, {nullable: true})
     permutedProducts: Array<Product>
 }

@@ -31,12 +31,13 @@ createConnection().then(db => {
                 const product = await productRepository.findOne({
                     where: {
                         id: req.params.id
-                    }
+                    },
+                    relations: ['permutedProducts']
                 });
                 res.send(product)
             })
             app.post('/api/products', async (req: Request, res: Response) => {
-                const product = await productRepository.create(req.body);
+                const product = productRepository.create(req.body);
                 const result = await productRepository.save(product)
                 channel.sendToQueue('product_created', Buffer.from(JSON.stringify(result)));
                 return res.send(result)
@@ -67,6 +68,28 @@ createConnection().then(db => {
                 product.likes += 1
                 const result = await productRepository.save(product)
                 return res.json(result)
+            })
+
+            app.post('/api/products/:id/permute/:permutedId', async (req: Request, res: Response) => {
+                const product = await productRepository.findOne({
+                    where: {
+                        id: req.params.id
+                    },
+                    relations: ['permutedProducts']
+                });
+                const permutedProduct = await productRepository.findOne({
+                    where: {
+                        id: req.params.permutedId
+                    },
+                    relations: ['permutedProducts']
+                })
+                permutedProduct.permutedProducts.push(product)
+                // product.permutedProducts.push(permutedProduct)
+
+                await productRepository.save(product)
+                await productRepository.save(permutedProduct)
+
+                return res.json(product)
             })
 
             app.listen(8000, () => console.log('Listening on port 8000'));
